@@ -7,25 +7,66 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/css/style.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/></head>
+    <link rel="icon" type="image/x-icon" href="../static/img/sandboxcsp_logo.png">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+
 <div class="row">
     <div class="col-md-8">
         <div class="container d-flex justify-content-center align-items-center pt-4 pb-4 pl-5 pr-5 pt-1" style="height: 80vh;">
             <div class="text-center w-50">
 <body>
-<h2>SandboxGPT 3.5 Turbo</h2>
-<form class="mb-4" id="bulk-chat-form">
-<textarea class="form-control" id="bulk-user-message" name="bulk_user_message" placeholder="Ask me anything!" style="width: 90%;"></textarea>
-    <button class="btn btn-primary mt-2" type="submit">Send</button>
-    <button class="btn btn-primary mt-2" type="button">Save</button>
-    <button class="btn btn-primary mt-2" type="button">Share</button>
-    <button class="btn btn-warning mt-2" type="button">Clear</button>
-</form>
-<div class="shadow p-4 mb-4 bg-white" id="bulk-response-container">
-    <!-- <div id="formatted-response"></div> -->
-        <!-- The bulk chat response will be displayed here -->
+
+    <div id="container">
+        <div class="nav"></div>
+        <h2>SandboxGPT 3.5 Turbo</h2>
+        <form class="mb-4" id="bulk-chat-form">
+            <textarea class="form-control" id="bulk-user-message" name="bulk_user_message" placeholder="Ask me anything!"></textarea>
+            <button class="btn btn-primary mt-2" type="submit">Send</button>
+            <button class="btn btn-primary mt-2" type="button">Save</button>
+            <button class="btn btn-primary mt-2" type="button">Share</button>
+            <button class="btn btn-warning mt-2" type="button">Clear</button>
+        </form>
+        <div class="shadow p-4 mb-4 bg-white" id="bulk-response-container">
+        </div>
+
+        <hr class="line">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="container mt-5 filer">
+        <h4>Add Files</h4>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+            </form>
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>Filename</th> 
+                    </tr> 
+                </thead> 
+                <tbody> 
+                    {% for file in files %} 
+                    <tr> 
+                        <td>{{ file }}</td> 
+                    </tr> 
+                    {% endfor %} 
+                </tbody> 
+            </table>
+        </div>
     </div>
     
+
+    <hr class="line">
+
     <script>            
         const bulkChatForm = document.getElementById('bulk-chat-form');
         const bulkResponseContainer = document.getElementById('bulk-response-container');
@@ -55,23 +96,7 @@
                 }
                 console.log(bulkData)
             });
-            
     </script>
-
-        <div class_="mb-4" id="assistant-response"></div><script>
-            document.getElementById("bulk-chat-form").addEventListener("submit", function(event){
-            event.preventDefault();
-    
-    // This is a mock response. In a real application, you would send the user's message to the server/API and get a response.
-    let mockResponse = "<code>Random</code>";
-    // Check if the response contains code. For this example, we'll use the heuristic that code is wrapped in backticks.
-    if (mockResponse.startsWith("`") && mockResponse.endsWith("`")) {
-        mockResponse = "<pre><code>" + mockResponse.slice(1, -1) + "</code></pre>";  // Remove backticks and wrap in code block
-    }
-    document.getElementById("assistant-response").innerHTML = mockResponse;
-    });
-    
-</script>
 
 </body>
 </div></div></div></div>
