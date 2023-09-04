@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with Assistant</title>
+</head>
+<body>
+    <h1>Chat with Assistant</h1>
+    <form id="chat-form">
+        <label for="user-message">Your Message:</label>
+        <textarea id="user-message" name="user_message" rows="5" cols="40"></textarea>
+        <button type="submit">Send</button>
+    </form>
+    
+    <div id="response-container">
+        <!-- The chat response will be displayed here -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+
+            const chatForm = document.getElementById('chat-form');
+            const responseContainer = document.getElementById('response-container');
+        
+            let eventSource;  // Declare the eventSource variable
+        
+            // Function to initialize the EventSource
+            function initializeEventSource() {
+                if (eventSource) {
+                    eventSource.close();  // Close the previous connection, if any
+                }
+        
+                eventSource = new EventSource('/get_chat_stream');
+        
+                eventSource.onmessage = function(event) {
+                    // If the received data is "[DONE]", handle it accordingly (e.g., close the EventSource connection)
+                    if (event.data.trim() === "[DONE]") {
+                        console.log("Received end of message stream.");
+                        eventSource.close();
+                        return;
+                    }
+                
+                    // Extract the actual JSON content after "data: " prefix
+                    const jsonData = event.data.replace("data: ", "");
+                
+                    try {
+                        const data = JSON.parse(jsonData);
+                        if (data.object === 'chat.completion.chunk' && data.choices && data.choices[0].delta && data.choices[0].delta.content) {
+                            const chatWord = data.choices[0].delta.content;
+                            responseContainer.textContent += chatWord + " ";  // Append the chatWord to the existing content
+                        }
+                    } catch (err) {
+                        console.error("Error parsing or processing JSON data:", err);
+                    }
+                };                                             
+                
+                eventSource.onerror = function(event) {
+                    // Handle errors
+                    console.error("EventSource failed:", event);
+                };
+            }
+        
+            // Initialize the EventSource for the first time
+            initializeEventSource();
+        
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+        
+                const userMessageInput = document.getElementById('user-message');
+                const userMessage = userMessageInput.value;
+        
+                // Send the user message to the server
+                const response = await fetch('/send_chat_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_message: userMessage })
+                });
+        
+                userMessageInput.value = ''; // Clear the input field
+        
+                // Reinitialize the EventSource to listen for the server's response
+                initializeEventSource();
+            });
+        });
+                
+    </script>    
+</body>
+</html>
