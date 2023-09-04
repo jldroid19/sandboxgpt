@@ -2,115 +2,45 @@
 
 <html>
 <head>
-<title>Chat with Assistant</title>
+    <title>SandboxGPT 3.5 Turbo</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/></head>
-<div class="row"><div class="col-md-8"><div class="container d-flex justify-content-center align-items-center pt-4 pb-4 pl-5 pr-5 pt-1" style="height: 80vh;"><div class="text-center w-50"><body>
-<!-- <h1>Chat with Assistant</h1>
-    <form id="chat-form">
-        <label for="user-message">Your Message:</label>
-        <textarea id="user-message" name="user_message" rows="5" cols="40"></textarea>
-        <button type="submit">Send</button>
-    </form>
-    
-    <div id="response-container">
-        
-    </div> -->
-<h2>Chat with Assistant</h2>
+<div class="row">
+    <div class="col-md-8">
+        <div class="container d-flex justify-content-center align-items-center pt-4 pb-4 pl-5 pr-5 pt-1" style="height: 80vh;">
+            <div class="text-center w-50">
+<body>
+<h2>SandboxGPT 3.5 Turbo</h2>
 <form class="mb-4" id="bulk-chat-form">
-<label class="form-label" for="bulk-user-message">Your Message:</label>
 <textarea class="form-control" cols="60" id="bulk-user-message" name="bulk_user_message" rows="10" style="resize: none;"></textarea>
-<button class="btn btn-primary mt-2" type="submit">Send</button>
-</form><div id="formatted-response">Formatted Response Here</div>
+    <button class="btn btn-primary mt-2" type="submit">Send</button>
+    <button class="btn btn-primary mt-2" type="button">Save</button>
+    <button class="btn btn-primary mt-2" type="button">Share</button>
+    <button class="btn btn-warning mt-2" type="button">Clear</button>
+</form>
 <div class="shadow p-4 mb-4 bg-white" id="bulk-response-container">
-<!-- The bulk chat response will be displayed here -->
-</div>
-<script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-
-            const chatForm = document.getElementById('chat-form');
-            const responseContainer = document.getElementById('response-container');
-        
-            let eventSource;
-
-            function initializeEventSource() {
-                if (eventSource) {
-                    eventSource.close();  // Close the previous connection, if any
-                }
-
-                eventSource = new EventSource('/get_chat_stream');
-
-                eventSource.onmessage = function(event) {
-                    // If the received data is "[DONE]", handle it accordingly (e.g., close the EventSource connection)
-                    if (event.data.trim() === "[DONE]") {
-                        console.log("Received end of message stream.");
-                        eventSource.close();
-                        return;
-                    }
-
-                    // Extract the actual JSON content after "data: " prefix
-                    const jsonData = event.data.replace("data: ", "");
-
-                    try {
-                        const data = JSON.parse(jsonData);
-                        if (data.object === 'chat.completion.chunk' && data.choices && data.choices[0].delta && data.choices[0].delta.content) {
-                            const chatWord = data.choices[0].delta.content;
-                            responseContainer.textContent += chatWord + " ";  // Append the chatWord to the existing content
-                        }
-                    } catch (err) {
-                        console.error("Error parsing or processing JSON data:", err);
-                    }
-                };                                             
-
-                eventSource.onerror = function(event) {
-                    // Handle errors
-                    console.error("EventSource failed:", event);
-                };
-            }
-
-            // Initialize the EventSource for the first time
-            initializeEventSource();
-
-            chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const userMessageInput = document.getElementById('user-message');
-                const userMessage = userMessageInput.value;
-
-                // Send the user message to the server
-                const response = await fetch('/send_chat_message', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ user_message: userMessage })
-                });
-
-                userMessageInput.value = ''; // Clear the input field
-
-                // Reinitialize the EventSource to listen for the server's response
-                initializeEventSource();
-            });
-        });
-                
-
-            const bulkChatForm = document.getElementById('bulk-chat-form');
-            const bulkResponseContainer = document.getElementById('bulk-response-container');
+    <!-- <div id="formatted-response"></div> -->
+        <!-- The bulk chat response will be displayed here -->
+    </div>
+    
+    <script>            
+        const bulkChatForm = document.getElementById('bulk-chat-form');
+        const bulkResponseContainer = document.getElementById('bulk-response-container');
             
-            bulkChatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                const bulkUserMessageInput = document.getElementById('bulk-user-message');
-                const bulkUserMessage = bulkUserMessageInput.value;
-
+        bulkChatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+        
+            const bulkUserMessageInput = document.getElementById('bulk-user-message');
+            const bulkUserMessage = bulkUserMessageInput.value;
+        
                 // Send the user message to the server for bulk response
-                const response = await fetch('/send_bulk_chat_message', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+            const response = await fetch('/send_bulk_chat_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                     body: JSON.stringify({ user_message: bulkUserMessage })
                 });
-
+        
                 bulkUserMessageInput.value = ''; // Clear the input field
                 
                 // Retrieve the bulk response from the server
@@ -119,72 +49,26 @@
                 if (bulkData.choices && bulkData.choices[0].message && bulkData.choices[0].message.content) {
                     bulkResponseContainer.textContent = bulkData.choices[0].message.content;
                 }
+                console.log(bulkData)
             });
-
+            
     </script>
-    {% for log in logs %}
+
         <div class_="mb-4" id="assistant-response"></div><script>
             document.getElementById("bulk-chat-form").addEventListener("submit", function(event){
             event.preventDefault();
     
     // This is a mock response. In a real application, you would send the user's message to the server/API and get a response.
-    let mockResponse = "<code>{{ log }}</code>";
+    let mockResponse = "<code>Random</code>";
     // Check if the response contains code. For this example, we'll use the heuristic that code is wrapped in backticks.
     if (mockResponse.startsWith("`") && mockResponse.endsWith("`")) {
         mockResponse = "<pre><code>" + mockResponse.slice(1, -1) + "</code></pre>";  // Remove backticks and wrap in code block
     }
-    
     document.getElementById("assistant-response").innerHTML = mockResponse;
     });
     
 </script>
-{% endfor %}
 
-<script>
-function formatResponse(responseText) {
-    // Split the response into individual list items based on number followed by a period pattern
-    const items = responseText.split(/\d+\. /).slice(1);
-
-    // Convert the items into HTML list format
-    let formattedResponse = '<ul>';
-    for (let item of items) {
-        formattedResponse += '<li>' + item + '</li>';
-    }
-    formattedResponse += '</ul>';
-
-    // Populate the formatted response in the dedicated area
-    document.getElementById('formatted-response').innerHTML = formattedResponse;
-}
-
-// Assuming you have a function to fetch the API response, 
-// you can call formatResponse function after receiving the response. For example:
-// fetchAPIResponse().then(response => {
-//     formatResponse(response.text);
-// });
-</script>
-
-<script>
-function formatResponse(responseText) {
-    // Split the response into individual list items based on space followed by number and a period pattern
-    const items = responseText.split(/ \d+\. /).slice(1);
-
-    // Convert the items into HTML list format
-    let formattedResponse = '<ul>';
-    for (let item of items) {
-        formattedResponse += '<li>' + item + '</li>';
-    }
-    formattedResponse += '</ul>';
-
-    // Populate the formatted response in the dedicated area
-    document.getElementById('formatted-response').innerHTML = formattedResponse;
-}
-
-// Assuming you have a function to fetch the API response, 
-// you can call formatResponse function after receiving the response. For example:
-// fetchAPIResponse().then(response => {
-//     formatResponse(response.text);
-// });
-</script>
 </body>
-</div></div></div><div class="col-md-4 d-flex flex-column justify-content-center">Options<button class="btn btn-primary mb-2 ml-2 mr-2" type="button">Save</button><button class="btn btn-primary mb-2 ml-2 mr-2" type="button">Share</button><button class="btn btn-primary mb-2 ml-2 mr-2" type="button">Clear</button></div></div>
+</div></div></div></div>
 </html>

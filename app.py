@@ -19,7 +19,7 @@ logs = []
 def index():
     return render_template('index.html', logs=logs)
 
-OPENAI_API_KEY = ""  # Replace this with your actual OpenAI API key
+OPENAI_API_KEY = "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"  # Replace this with your actual OpenAI API key
 
 @app.route('/send_chat_message', methods=['POST'])
 def send_chat_message():

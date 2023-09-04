@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    /* display: flex; */
+    margin: 0 auto;
+    width: 1200px;
+}
+
+.nav {
+    margin-top: 20px;
+    width: 400px;
+}
+
+.nav-top {
+    display: flex;
+    width: 1200px;
+    /* padding: 10px; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leaf {
+    background-color: turquoise;
+    border-radius: 5px;
+}
+
+.textarea {
+    width: 90%;
+    height: 90vh;
+    border-radius: 30px;
+    padding-left: 10px;
+}
+
+.signin {
+    text-decoration: none;
+    color: black;
+}
+
+.cart {
+    height: 40px;
+    width: 40px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    width: 1200px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.links {
+    text-decoration: none;
+    color: black;
+}
+
+.line {
+    width: 1200px;
+}
+
+.big-header {
+    display: flex;
+    justify-content: center;
+    width: 1200px;
+    padding: 30px;
+}
+
+#main_content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lefty {
+    display: flex;
+    width: 750px;
+}
+
+.text-box {
+    display: flex;
+    flex-direction: column;
+    background-color: turquoise;
+    padding: 25px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-box h1 {
+    display: flex;
+    color: white;
+}
+
+.discover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+}
+
+#left-img {
+    width: 380px;
+    height: 380px;
+}
+
+.righty {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.r_aloe {
+    width: 400px;
+}
+
+.text-box-soothing {
+    display: flex;
+    background-color: turquoise;
+    align-items: center;
+    padding-left: 25px;
+    color: white;
+}
+
+#planter_box {
+    display: flex;
+    margin-top: 45px;
+    padding: 25px;
+    background-color: aquamarine;
+    justify-content: space-evenly;
+}
+
+.plant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.plant img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.plant p {
+    margin-top: 15px;
+}
+
+#cookie {
+    display: flex;
+    width: 1200px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#cookie {
+    display: flex;
+    border: 2px solid black;
+    background-color: white;
+    margin-top: 15px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    position: fixed;
+    bottom: 0;
+}
+
+#cookie h3 {
+    width: 800px;
+}
+
+.accept_btn {
+    margin-right: 35px;
+    background-color: turquoise;
+    box-shadow: 3px 3px black;
+    color: white;
+    width: 100px;
+    height: 25px;
+}
