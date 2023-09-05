@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify, Response, redirect, url_for, flash
 import os
 from dotenv import load_dotenv
+from connectors import dbconnectionString
 import openai
 import requests
 import time
+import pyodbc
 from werkzeug.utils import secure_filename
 
 
@@ -18,7 +20,7 @@ app = Flask(__name__)
 
 # File uploading
 UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER")
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = os.environ.get("SECRET_KEY")  # for flashing messages
@@ -159,5 +161,20 @@ def upload_file():
         flash('Allowed file types are txt')
         return redirect(url_for('index'))
 
+@app.route('/run_query', methods=['GET'])
+def run_query():
+    try:
+        connection = pyodbc.connect(dbconnectionString)
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM chat_history")
+        data = cursor.fetchall()
+        connection.close()
+        return str(data)
+    except Exception as e:
+        return str(e)
+
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=8082, threaded=True)
+    app.run(debug=True, host='0.0.0.0', port=8082, threaded=True)

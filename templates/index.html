@@ -62,6 +62,9 @@
                 </tbody> 
             </table>
         </div>
+        <h1>SQL Query Results</h1>
+        <button id="queryButton">Run Query</button>
+        <div id="results"></div>
     </div>
     
 
@@ -95,6 +98,20 @@
                     bulkResponseContainer.textContent = bulkData.choices[0].message.content;
                 }
                 console.log(bulkData)
+            });
+            $(document).ready(function() {
+                $("#queryButton").click(function() {
+                    $.ajax({
+                        url: "/run_query", // Replace with your Flask route URL
+                        type: "GET",
+                        success: function(response) {
+                            $("#results").html(response);
+                        },
+                        error: function(error) {
+                            $("#results").html("Error: " + error.responseText);
+                        }
+                    });
+                });
             });
     </script>
 
